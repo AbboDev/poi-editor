@@ -7,3 +7,8 @@ declare module '*.vue' {
   >;
   export default component;
 }
+
+declare module '*.png' {
+  const content: string;
+  export default content;
+}

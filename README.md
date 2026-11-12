@@ -11,7 +11,7 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 ### Key Features
 
 - **Interactive Map Visualization**:
-  - OpenStreetMap tiles rendered using Leaflet and `@vue-leaflet/vue-leaflet`.
+  - OpenStreetMap tiles rendered using native Leaflet.
   - Dynamic panning, zooming, and centering on points.
 
 - **Point Creation & Interactive Placement**:
@@ -43,7 +43,7 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **State Management**: [Pinia](https://pinia.vuejs.org/)
 - **Internationalization**: [vue-i18n](https://vue-i18n.intlify.dev/)
-- **Mapping**: [Leaflet](https://leafletjs.com/) via [@vue-leaflet/vue-leaflet](https://github.com/vue-leaflet/vue-leaflet) & OpenStreetMap
+- **Mapping**: [Leaflet](https://leafletjs.com/) with native Vue 3 Composition API & OpenStreetMap
 - **Package Manager**: [pnpm](https://pnpm.io/)
 - **Code Quality**: ESLint, Prettier, Husky, lint-staged, and Commitlint (Conventional Commits)
 
