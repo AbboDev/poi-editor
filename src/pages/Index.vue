@@ -5,7 +5,7 @@
       :tap="false"
       :zoom="zoom"
       :center="center"
-      class="h-auto"
+      style="height: auto"
       @click="addMarker"
       @moveend="changeCenter"
     >

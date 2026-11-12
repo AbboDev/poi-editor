@@ -24,7 +24,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list class="column no-wrap h-full">
+      <q-list class="column no-wrap full-height">
         <q-item-label header> Points </q-item-label>
 
         <q-item clickable v-ripple @click="addPoint">
@@ -63,7 +63,7 @@
 
         <q-separator />
 
-        <q-scroll-area class="h-full">
+        <q-scroll-area class="full-height">
           <EssentialLink
             v-for="(item, index) in $store.state.map.points"
             :key="`marker-${index}`"
