@@ -11,9 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          POI Editor
-        </q-toolbar-title>
+        <q-toolbar-title> POI Editor </q-toolbar-title>
 
         <q-btn
           icon="add_location_alt"
@@ -25,24 +23,11 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list
-        class="column no-wrap"
-        style="height: 100%;"
-      >
-        <q-item-label header>
-          Points
-        </q-item-label>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+      <q-list class="column no-wrap" style="height: 100%">
+        <q-item-label header> Points </q-item-label>
 
-        <q-item
-          clickable
-          v-ripple
-          @click="addPoint"
-        >
+        <q-item clickable v-ripple @click="addPoint">
           <q-item-section avatar>
             <q-icon name="add_location_alt" />
           </q-item-section>
@@ -78,7 +63,7 @@
 
         <q-separator />
 
-        <q-scroll-area style="height: 100%;">
+        <q-scroll-area style="height: 100%">
           <EssentialLink
             v-for="(item, index) in $store.state.map.points"
             :key="`marker-${index}`"
@@ -108,13 +93,13 @@ export default defineComponent({
     EssentialLink
   },
 
-  setup () {
+  setup() {
     const leftDrawerOpen = ref(false);
 
     return {
       file: ref(null),
       leftDrawerOpen,
-      toggleLeftDrawer () {
+      toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       }
     };
@@ -123,7 +108,7 @@ export default defineComponent({
     addPoint() {
       this.$store.dispatch('map/push', {
         id: uid(),
-        title: 'Nuovo punto',
+        title: 'Nuovo punto'
       });
     },
     importPoints() {
@@ -133,7 +118,7 @@ export default defineComponent({
         message: 'Importazione avviata...',
         group: false,
         timeout: 0,
-        spinner: true,
+        spinner: true
       });
 
       reader.onload = (event) => {
@@ -164,7 +149,7 @@ export default defineComponent({
                 }
 
                 importStatus({
-                  caption: `${Math.floor(record * 100 / records.length)}%`
+                  caption: `${Math.floor((record * 100) / records.length)}%`
                 });
               }
 
@@ -191,7 +176,7 @@ export default defineComponent({
                 }
 
                 importStatus({
-                  caption: `${Math.floor(max * 100 / points.length)}%`
+                  caption: `${Math.floor((max * 100) / points.length)}%`
                 });
 
                 this.$store.dispatch(

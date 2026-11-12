@@ -2,6 +2,20 @@
   "vetur.validation.template": false,
   "vetur.format.enable": false,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
-  
-  "vetur.experimental.templateInterpolationService": true
+
+  "vetur.experimental.templateInterpolationService": true,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#4C0A64",
+    "titleBar.activeBackground": "#6A0E8C",
+    "titleBar.activeForeground": "#FDFAFE",
+    "titleBar.inactiveBackground": "#4C0A64",
+    "titleBar.inactiveForeground": "#FDFAFE",
+    "statusBar.background": "#4C0A64",
+    "statusBar.foreground": "#FDFAFE",
+    "statusBar.debuggingBackground": "#4C0A64",
+    "statusBar.debuggingForeground": "#FDFAFE",
+    "statusBar.noFolderBackground": "#4C0A64",
+    "statusBar.noFolderForeground": "#FDFAFE"
+  },
+  "i18n-ally.localesPaths": ["src/i18n"]
 }

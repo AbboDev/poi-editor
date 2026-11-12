@@ -1,8 +1,5 @@
 <template>
-  <q-item
-    clickable
-    @click="setCenter"
-  >
+  <q-item clickable @click="setCenter">
     <q-item-section>
       <q-item-label>
         {{ titleLocal }}
@@ -31,12 +28,7 @@
     </q-item-section>
 
     <q-item-section side>
-      <q-btn
-        round
-        color="primary"
-        icon="delete"
-        @click="remove"
-      />
+      <q-btn round color="primary" icon="delete" @click="remove" />
     </q-item-section>
   </q-item>
 </template>
@@ -64,7 +56,7 @@ export default defineComponent({
   },
   data() {
     return {
-      titleLocal: this.title,
+      titleLocal: this.title
     };
   },
   methods: {

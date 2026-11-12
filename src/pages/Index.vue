@@ -5,7 +5,7 @@
       :tap="false"
       :zoom="zoom"
       :center="center"
-      style="height: auto;"
+      style="height: auto"
       @click="addMarker"
       @moveend="changeCenter"
     >
@@ -34,12 +34,7 @@
 <script>
 import { uid } from 'quasar';
 import { defineComponent } from 'vue';
-import {
-  LMap,
-  LPopup,
-  LMarker,
-  LTileLayer
-} from '@vue-leaflet/vue-leaflet';
+import { LMap, LPopup, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet';
 
 export default defineComponent({
   components: {
@@ -59,9 +54,10 @@ export default defineComponent({
   watch: {
     '$store.state.map.center'() {
       const newCenter = this.$store.state.map.center;
-      const isEqual = newCenter.length === this.center.length
-        && newCenter[0] === this.center[0]
-        && newCenter[1] === this.center[1];
+      const isEqual =
+        newCenter.length === this.center.length &&
+        newCenter[0] === this.center[0] &&
+        newCenter[1] === this.center[1];
 
       if (!isEqual) {
         this.center = this.$store.state.map.center;
@@ -79,7 +75,7 @@ export default defineComponent({
         this.$store.dispatch('map/push', {
           id,
           title: 'Nuovo punto',
-          center: position,
+          center: position
         });
       }
     },
@@ -88,10 +84,9 @@ export default defineComponent({
     },
     drag(event) {
       const marker = event.target;
-      const position = Object.values(marker.getLatLng())
-        .map((coordinate) => {
-          return parseFloat(coordinate.toFixed(8));
-        });
+      const position = Object.values(marker.getLatLng()).map((coordinate) => {
+        return parseFloat(coordinate.toFixed(8));
+      });
 
       this.$store.dispatch('map/update', {
         id: marker.id,
@@ -101,15 +96,16 @@ export default defineComponent({
       });
     },
     changeCenter(event) {
-      const center = Object.values(event.target.getCenter())
-        .map((coordinate) => {
+      const center = Object.values(event.target.getCenter()).map(
+        (coordinate) => {
           return parseFloat(coordinate.toFixed(8));
-        });
+        }
+      );
 
       this.center = center;
 
       this.$store.dispatch('map/updateCenter', center);
     }
-  },
+  }
 });
 </script>

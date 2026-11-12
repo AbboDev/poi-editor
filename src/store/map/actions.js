@@ -1,8 +1,9 @@
 export function updateCenter({ commit }, center) {
-  if (Array.isArray(center)
-    && center.length === 2
-    && !isNaN(center[0])
-    && !isNaN(center[1])
+  if (
+    Array.isArray(center) &&
+    center.length === 2 &&
+    !isNaN(center[0]) &&
+    !isNaN(center[1])
   ) {
     commit('updateCenter', center);
   }

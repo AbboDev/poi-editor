@@ -1,4 +1,4 @@
-const Buffer = require('buffer/').Buffer;
+import { Buffer } from 'buffer';
 
 export function ascii2utf8(buffer) {
   let c;
@@ -14,13 +14,13 @@ export function ascii2utf8(buffer) {
     c = buffer.readUInt8(i, 1);
 
     if (c < 0x80) {
-      utf8.writeUInt8(buffer.readUInt8(i, 1), j += 1);
+      utf8.writeUInt8(buffer.readUInt8(i, 1), (j += 1));
     } else if (c < 0xc0) {
-      utf8.writeUInt8(0xc2, j += 1);
-      utf8.writeUInt8(buffer.readUInt8(i, 1), j += 1);
+      utf8.writeUInt8(0xc2, (j += 1));
+      utf8.writeUInt8(buffer.readUInt8(i, 1), (j += 1));
     } else {
-      utf8.writeUInt8(0xc3, j += 1);
-      utf8.writeUInt8(buffer.readUInt8(i, 1) - 0x40, j += 1);
+      utf8.writeUInt8(0xc3, (j += 1));
+      utf8.writeUInt8(buffer.readUInt8(i, 1) - 0x40, (j += 1));
     }
   }
 
@@ -47,52 +47,54 @@ export function importOV2(input) {
         rlength = ov2.readUInt32LE(i + 1);
 
         switch (type) {
-        // Deleted record:
-        case 0:
-          throw new Error(`The type "${type}" is not yet decoded!`);
+          // Deleted record:
+          case 0:
+            throw new Error(`The type "${type}" is not yet decoded!`);
 
-        // Skipper Record:
-        case 1: {
-          const west = ov2.readInt32LE(i + 5) / 100000;
-          const south = ov2.readInt32LE(i + 9) / 100000;
-          const east = ov2.readInt32LE(i + 13) / 100000;
-          const north = ov2.readInt32LE(i + 17) / 100000;
+          // Skipper Record:
+          case 1: {
+            const west = ov2.readInt32LE(i + 5) / 100000;
+            const south = ov2.readInt32LE(i + 9) / 100000;
+            const east = ov2.readInt32LE(i + 13) / 100000;
+            const north = ov2.readInt32LE(i + 17) / 100000;
 
-          records[record] = {
-            record,
-            type,
-            bytes: rlength,
-            lng: west + (east - west),
-            lat: south + (north - south),
-          };
+            records[record] = {
+              record,
+              type,
+              bytes: rlength,
+              lng: west + (east - west),
+              lat: south + (north - south)
+            };
 
-          i += 21;
-          record += 1;
-          break;
-        }
+            i += 21;
+            record += 1;
+            break;
+          }
 
-        // Simple POI Record:
-        case 2:
-          records[record] = {
-            record,
-            type,
-            length: rlength,
-            lng: ov2.readInt32LE(i + 5) / 100000,
-            lat: ov2.readInt32LE(i + 9) / 100000,
-            info: ascii2utf8(ov2.slice(i + 13, i + (rlength)))
-              .replace(/\0/g, '')
-          };
+          // Simple POI Record:
+          case 2:
+            records[record] = {
+              record,
+              type,
+              length: rlength,
+              lng: ov2.readInt32LE(i + 5) / 100000,
+              lat: ov2.readInt32LE(i + 9) / 100000,
+              info: ascii2utf8(ov2.slice(i + 13, i + rlength)).replace(
+                /\0/g,
+                ''
+              )
+            };
 
-          i += ov2.readUInt32LE(i + 1);
-          record += 1;
-          break;
+            i += ov2.readUInt32LE(i + 1);
+            record += 1;
+            break;
 
-        // Extended POI Record:
-        case 3:
-          throw new Error(`The type "${type}" is not yet decoded!`);
+          // Extended POI Record:
+          case 3:
+            throw new Error(`The type "${type}" is not yet decoded!`);
 
-        default:
-          throw new Error(`The type "${type}" is unknown!`);
+          default:
+            throw new Error(`The type "${type}" is unknown!`);
         }
       } while (i < ov2.length);
     } catch (error) {

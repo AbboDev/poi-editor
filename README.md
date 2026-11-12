@@ -11,18 +11,15 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 ### Key Features
 
 - **Interactive Map Visualization**:
-
   - OpenStreetMap tiles rendered using Leaflet and `@vue-leaflet/vue-leaflet`.
   - Dynamic panning, zooming, and centering on points.
 
 - **Point Creation & Interactive Placement**:
-
   - **Click to Add**: Add new points directly by clicking anywhere on the map.
   - **Toolbar / Sidebar Action**: Add a point at the current map view center.
   - **Drag and Drop**: Reposition markers on the map by dragging them; coordinates update automatically in real time.
 
 - **Point Management & Editing**:
-
   - **Collapsible Sidebar**: Lists all points with their labels and coordinates.
   - **In-Place Editing**: Double-click or click to edit point names inline with instant auto-save.
   - **Center & Focus**: Click any point in the sidebar list to center the map on its coordinates.
@@ -49,7 +46,7 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 
 ### Prerequisites
 
-- **Node.js**: `>= 16` (see `.nvmrc`)
+- **Node.js**: `>= 26` (see `.nvmrc`)
 - **pnpm**: `>= 7.0.0`
 
 ### Installation
@@ -63,7 +60,7 @@ pnpm install
 Start the development server with hot-code reloading:
 
 ```bash
-pnpm quasar dev
+pnpm dev
 ```
 
 ### Build for Production
@@ -71,7 +68,7 @@ pnpm quasar dev
 Compile and bundle the production assets:
 
 ```bash
-pnpm quasar build
+pnpm build
 ```
 
 ### Code Quality & Scripts
@@ -93,4 +90,4 @@ pnpm quasar build
 
 ## Configuration
 
-For advanced configuration, see [Configuring quasar.conf.js](https://v2.quasar.dev/quasar-cli/quasar-conf-js).
+For advanced configuration, see [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).
