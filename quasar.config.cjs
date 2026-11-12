@@ -20,7 +20,7 @@ const { defineConfig } = require('@quasar/app-webpack/wrappers');
 module.exports = defineConfig((ctx) => {
   return {
     // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
-    supportTS: false,
+    supportTS: true,
 
     // ESLint configuration
     eslint: {

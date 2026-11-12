@@ -35,6 +35,7 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 ## Tech Stack
 
 - **Framework**: [Quasar Framework v2](https://quasar.dev/) with [Vue 3](https://v3.vuejs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **State Management**: [Vuex 4](https://vuex.vuejs.org/)
 - **Mapping**: [Leaflet](https://leafletjs.com/) via [@vue-leaflet/vue-leaflet](https://github.com/vue-leaflet/vue-leaflet) & OpenStreetMap
 - **Package Manager**: [pnpm](https://pnpm.io/)
@@ -73,6 +74,10 @@ pnpm build
 
 ### Code Quality & Scripts
 
+- **Type check**:
+  ```bash
+  pnpm typecheck
+  ```
 - **Lint files**:
   ```bash
   pnpm lint

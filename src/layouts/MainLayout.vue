@@ -80,11 +80,12 @@
   </q-layout>
 </template>
 
-<script>
+<script lang="ts">
 import { uid } from 'quasar';
-import EssentialLink from 'components/EssentialLink.vue';
 import { defineComponent, ref } from 'vue';
-import { importOV2 } from '../utils/ov2';
+import EssentialLink from 'components/EssentialLink.vue';
+import { importOV2, OV2Record } from '../utils/ov2';
+import type { Point } from 'src/store/map';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -95,9 +96,10 @@ export default defineComponent({
 
   setup() {
     const leftDrawerOpen = ref(false);
+    const file = ref<File | null>(null);
 
     return {
-      file: ref(null),
+      file,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -112,6 +114,9 @@ export default defineComponent({
       });
     },
     importPoints() {
+      if (!this.file) return;
+
+      const currentFile = this.file;
       const reader = new FileReader();
       const importStatus = this.$q.notify({
         type: 'primary',
@@ -121,12 +126,14 @@ export default defineComponent({
         spinner: true
       });
 
-      reader.onload = (event) => {
-        importOV2(event.target.result)
-          .then((records) => {
-            return new Promise((resolve) => {
-              const points = [];
-              const errors = [];
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        if (!event.target?.result) return;
+
+        importOV2(event.target.result as ArrayBuffer)
+          .then((records: OV2Record[]) => {
+            return new Promise<Point[]>((resolve) => {
+              const points: Point[] = [];
+              const errors: string[] = [];
 
               importStatus({
                 message: 'Caricamento record...',
@@ -135,29 +142,26 @@ export default defineComponent({
 
               for (const record of records) {
                 if (record.lng && record.lat) {
-                  if (!record.info) {
-                    record.info = this.file.name.replace(/\.[^/.]+$/, '');
-                  }
+                  const info =
+                    record.info || currentFile.name.replace(/\.[^/.]+$/, '');
 
                   points.push({
                     id: uid(),
-                    title: record.info,
+                    title: info,
                     center: [record.lat, record.lng]
                   });
                 } else {
-                  errors.push(`The record "${record}" misses properties!`);
+                  errors.push(
+                    `The record "${record.record}" misses properties!`
+                  );
                 }
-
-                importStatus({
-                  caption: `${Math.floor((record * 100) / records.length)}%`
-                });
               }
 
               resolve(points);
             });
           })
-          .then((points) => {
-            return new Promise((resolve) => {
+          .then((points: Point[]) => {
+            return new Promise<void>((resolve) => {
               let i = 0;
               const step = 100;
 
@@ -187,7 +191,7 @@ export default defineComponent({
               }, 500);
             });
           })
-          .catch((error) => {
+          .catch((error: Error) => {
             this.$q.notify({
               type: 'negative',
               message: error.message,
@@ -206,7 +210,7 @@ export default defineComponent({
           });
       };
 
-      reader.readAsArrayBuffer(this.file);
+      reader.readAsArrayBuffer(currentFile);
     }
   }
 });

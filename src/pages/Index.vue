@@ -31,10 +31,18 @@
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import { uid } from 'quasar';
 import { defineComponent } from 'vue';
 import { LMap, LPopup, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet';
+import type { Point } from 'src/store/map';
+
+interface MapClickEvent {
+  latlng?: {
+    lat: number;
+    lng: number;
+  };
+}
 
 export default defineComponent({
   components: {
@@ -48,7 +56,7 @@ export default defineComponent({
     return {
       zoom: 15,
       isMoved: false,
-      center: this.$store.state.map.center
+      center: this.$store.state.map.center as [number, number]
     };
   },
   watch: {
@@ -65,12 +73,13 @@ export default defineComponent({
     }
   },
   methods: {
-    addMarker(event) {
+    addMarker(event: MapClickEvent) {
       if (event.latlng) {
         const id = uid();
-        const position = Object.values(event.latlng).map((coordinate) => {
-          return parseFloat(coordinate.toFixed(8));
-        });
+        const position: [number, number] = [
+          parseFloat(event.latlng.lat.toFixed(8)),
+          parseFloat(event.latlng.lng.toFixed(8))
+        ];
 
         this.$store.dispatch('map/push', {
           id,
@@ -79,14 +88,18 @@ export default defineComponent({
         });
       }
     },
-    add(event, item) {
+    add(event: { target: { id?: string } }, item: Point) {
       event.target.id = item.id;
     },
-    drag(event) {
+    drag(event: {
+      target: { id: string; getLatLng: () => { lat: number; lng: number } };
+    }) {
       const marker = event.target;
-      const position = Object.values(marker.getLatLng()).map((coordinate) => {
-        return parseFloat(coordinate.toFixed(8));
-      });
+      const latlng = marker.getLatLng();
+      const position: [number, number] = [
+        parseFloat(latlng.lat.toFixed(8)),
+        parseFloat(latlng.lng.toFixed(8))
+      ];
 
       this.$store.dispatch('map/update', {
         id: marker.id,
@@ -95,12 +108,14 @@ export default defineComponent({
         }
       });
     },
-    changeCenter(event) {
-      const center = Object.values(event.target.getCenter()).map(
-        (coordinate) => {
-          return parseFloat(coordinate.toFixed(8));
-        }
-      );
+    changeCenter(event: {
+      target: { getCenter: () => { lat: number; lng: number } };
+    }) {
+      const centerCoord = event.target.getCenter();
+      const center: [number, number] = [
+        parseFloat(centerCoord.lat.toFixed(8)),
+        parseFloat(centerCoord.lng.toFixed(8))
+      ];
 
       this.center = center;
 

@@ -1,9 +1,19 @@
 import { Buffer } from 'buffer';
 
-export function ascii2utf8(buffer) {
-  let c;
-  let i;
-  let j;
+export interface OV2Record {
+  record: number;
+  type: number;
+  bytes?: number;
+  length?: number;
+  lng: number;
+  lat: number;
+  info?: string;
+}
+
+export function ascii2utf8(buffer: Buffer): string {
+  let c: number;
+  let i: number;
+  let j: number;
 
   // New buffer with utf8 string:
   const utf8 = Buffer.alloc(buffer.length * 2);
@@ -11,35 +21,32 @@ export function ascii2utf8(buffer) {
   // Convert:
   j = 0;
   for (i = 0; i < buffer.length; i++) {
-    c = buffer.readUInt8(i, 1);
+    c = buffer.readUInt8(i);
 
     if (c < 0x80) {
-      utf8.writeUInt8(buffer.readUInt8(i, 1), (j += 1));
+      utf8.writeUInt8(buffer.readUInt8(i), (j += 1));
     } else if (c < 0xc0) {
       utf8.writeUInt8(0xc2, (j += 1));
-      utf8.writeUInt8(buffer.readUInt8(i, 1), (j += 1));
+      utf8.writeUInt8(buffer.readUInt8(i), (j += 1));
     } else {
       utf8.writeUInt8(0xc3, (j += 1));
-      utf8.writeUInt8(buffer.readUInt8(i, 1) - 0x40, (j += 1));
+      utf8.writeUInt8(buffer.readUInt8(i) - 0x40, (j += 1));
     }
   }
 
   return utf8.toString('utf8', 0, j);
 }
 
-export function importOV2(input) {
+export function importOV2(input: ArrayBuffer | Buffer): Promise<OV2Record[]> {
   return new Promise((resolve, reject) => {
-    const ov2 = Buffer.from(input);
-    const records = [];
+    const ov2 = Buffer.from(input as ArrayBuffer);
+    const records: OV2Record[] = [];
 
-    let type;
-    let rlength;
+    let type: number;
+    let rlength: number;
 
     let record = 0;
     let i = 0;
-
-    record = 0;
-    i = 0;
 
     try {
       do {
@@ -79,7 +86,7 @@ export function importOV2(input) {
               length: rlength,
               lng: ov2.readInt32LE(i + 5) / 100000,
               lat: ov2.readInt32LE(i + 9) / 100000,
-              info: ascii2utf8(ov2.slice(i + 13, i + rlength)).replace(
+              info: ascii2utf8(ov2.subarray(i + 13, i + rlength)).replace(
                 /\0/g,
                 ''
               )
@@ -99,6 +106,7 @@ export function importOV2(input) {
       } while (i < ov2.length);
     } catch (error) {
       reject(error);
+      return;
     }
 
     resolve(records);

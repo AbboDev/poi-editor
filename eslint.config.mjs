@@ -2,14 +2,30 @@ import js from '@eslint/js';
 import globals from 'globals';
 import pluginVue from 'eslint-plugin-vue';
 import prettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
-export default [
+export default tseslint.config(
   {
     ignores: ['dist/**', '.quasar/**', 'node_modules/**', '.husky/**']
   },
   js.configs.recommended,
+  ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/essential'],
   prettier,
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser
+      }
+    }
+  },
+  {
+    files: ['**/*.cjs', '**/*.js'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off'
+    }
+  },
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -31,7 +47,8 @@ export default [
     rules: {
       'prefer-promise-reject-errors': 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-      'vue/multi-word-component-names': 'off'
+      'vue/multi-word-component-names': 'off',
+      '@typescript-eslint/no-explicit-any': 'off'
     }
   }
-];
+);

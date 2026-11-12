@@ -33,8 +33,8 @@
   </q-item>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   name: 'EssentialLink',
@@ -44,10 +44,8 @@ export default defineComponent({
       required: true
     },
     coordinates: {
-      type: Array,
-      default() {
-        return [];
-      }
+      type: Array as PropType<number[]>,
+      default: () => []
     },
     id: {
       type: String,
@@ -56,11 +54,11 @@ export default defineComponent({
   },
   data() {
     return {
-      titleLocal: this.title
+      titleLocal: this.title as string
     };
   },
   methods: {
-    update(value) {
+    update(value: string) {
       this.$store.dispatch('map/update', {
         id: this.id,
         data: {
