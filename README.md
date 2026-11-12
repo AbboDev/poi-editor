@@ -28,7 +28,7 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 - **TomTom OV2 File Import**:
   - Native binary parser for TomTom `.ov2` POI files.
   - Extracts coordinates and decodes point descriptions to UTF-8.
-  - Batch ingestion into Vuex store with progress notifications and status feedback.
+  - Batch ingestion into Pinia store with progress notifications and status feedback.
 
 - **Internationalization (i18n)**:
   - Multi-language support powered by `vue-i18n`.
@@ -41,8 +41,8 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
 
 - **Framework**: [Quasar Framework v2](https://quasar.dev/) with [Vue 3](https://v3.vuejs.org/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **State Management**: [Pinia](https://pinia.vuejs.org/)
 - **Internationalization**: [vue-i18n](https://vue-i18n.intlify.dev/)
-- **State Management**: [Vuex 4](https://vuex.vuejs.org/)
 - **Mapping**: [Leaflet](https://leafletjs.com/) via [@vue-leaflet/vue-leaflet](https://github.com/vue-leaflet/vue-leaflet) & OpenStreetMap
 - **Package Manager**: [pnpm](https://pnpm.io/)
 - **Code Quality**: ESLint, Prettier, Husky, lint-staged, and Commitlint (Conventional Commits)

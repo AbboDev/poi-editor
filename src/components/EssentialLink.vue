@@ -43,6 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useMapStore } from 'src/stores/map';
 
 export default defineComponent({
   name: 'EssentialLink',
@@ -60,6 +61,10 @@ export default defineComponent({
       required: true
     }
   },
+  setup() {
+    const mapStore = useMapStore();
+    return { mapStore };
+  },
   data() {
     return {
       titleLocal: this.title as string
@@ -67,18 +72,15 @@ export default defineComponent({
   },
   methods: {
     update(value: string) {
-      this.$store.dispatch('map/update', {
-        id: this.id,
-        data: {
-          title: value
-        }
+      this.mapStore.update(this.id, {
+        title: value
       });
     },
     remove() {
-      this.$store.dispatch('map/remove', this.id);
+      this.mapStore.remove(this.id);
     },
     setCenter() {
-      this.$store.dispatch('map/updateCenterById', this.id);
+      this.mapStore.updateCenterById(this.id);
     }
   }
 });

@@ -16,7 +16,7 @@
       />
 
       <l-marker
-        v-for="(item, index) in $store.state.map.points"
+        v-for="(item, index) in mapStore.points"
         :key="`marker-${index}`"
         :lat-lng="item.center"
         draggable
@@ -35,7 +35,7 @@
 import { uid } from 'quasar';
 import { defineComponent } from 'vue';
 import { LMap, LPopup, LMarker, LTileLayer } from '@vue-leaflet/vue-leaflet';
-import type { Point } from 'src/store/map';
+import { useMapStore, Point } from 'src/stores/map';
 
 interface MapClickEvent {
   latlng?: {
@@ -52,24 +52,30 @@ export default defineComponent({
     LTileLayer
   },
   name: 'PageIndex',
+  setup() {
+    const mapStore = useMapStore();
+    return { mapStore };
+  },
   data() {
     return {
       zoom: 15,
       isMoved: false,
-      center: this.$store.state.map.center as [number, number]
+      center: useMapStore().center
     };
   },
   watch: {
-    '$store.state.map.center'() {
-      const newCenter = this.$store.state.map.center;
-      const isEqual =
-        newCenter.length === this.center.length &&
-        newCenter[0] === this.center[0] &&
-        newCenter[1] === this.center[1];
+    'mapStore.center': {
+      handler(newCenter: [number, number]) {
+        const isEqual =
+          newCenter.length === this.center.length &&
+          newCenter[0] === this.center[0] &&
+          newCenter[1] === this.center[1];
 
-      if (!isEqual) {
-        this.center = this.$store.state.map.center;
-      }
+        if (!isEqual) {
+          this.center = newCenter;
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -81,7 +87,7 @@ export default defineComponent({
           parseFloat(event.latlng.lng.toFixed(8))
         ];
 
-        this.$store.dispatch('map/push', {
+        this.mapStore.push({
           id,
           title: this.$t('points.newPoint'),
           center: position
@@ -101,11 +107,8 @@ export default defineComponent({
         parseFloat(latlng.lng.toFixed(8))
       ];
 
-      this.$store.dispatch('map/update', {
-        id: marker.id,
-        data: {
-          center: position
-        }
+      this.mapStore.update(marker.id, {
+        center: position
       });
     },
     changeCenter(event: {
@@ -118,8 +121,7 @@ export default defineComponent({
       ];
 
       this.center = center;
-
-      this.$store.dispatch('map/updateCenter', center);
+      this.mapStore.updateCenter(center);
     }
   }
 });

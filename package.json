@@ -21,11 +21,11 @@
     "axios": "^1.7.9",
     "buffer": "^6.0.3",
     "leaflet": "^1.9.4",
+    "pinia": "^3.0.4",
     "quasar": "^2.35.3",
     "vue": "^3.5.13",
     "vue-i18n": "^11.1.1",
-    "vue-router": "^4.5.0",
-    "vuex": "^4.1.0"
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

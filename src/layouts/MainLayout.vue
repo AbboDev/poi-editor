@@ -97,7 +97,7 @@
 
         <q-scroll-area class="full-height">
           <EssentialLink
-            v-for="(item, index) in $store.state.map.points"
+            v-for="(item, index) in mapStore.points"
             :key="`marker-${index}`"
             v-bind="item"
             :coordinates="item.center"
@@ -118,7 +118,7 @@ import { defineComponent, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import EssentialLink from 'components/EssentialLink.vue';
 import { importOV2, OV2Record } from '../utils/ov2';
-import type { Point } from 'src/store/map';
+import { useMapStore, Point } from 'src/stores/map';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -129,6 +129,7 @@ export default defineComponent({
 
   setup() {
     const { t, locale } = useI18n();
+    const mapStore = useMapStore();
     const leftDrawerOpen = ref(false);
     const file = ref<File | null>(null);
 
@@ -140,6 +141,7 @@ export default defineComponent({
       t,
       file,
       locale,
+      mapStore,
       setLocale,
       leftDrawerOpen,
       toggleLeftDrawer() {
@@ -149,7 +151,7 @@ export default defineComponent({
   },
   methods: {
     addPoint() {
-      this.$store.dispatch('map/push', {
+      this.mapStore.push({
         id: uid(),
         title: this.$t('points.newPoint')
       });
@@ -226,10 +228,7 @@ export default defineComponent({
                   caption: `${Math.floor((max * 100) / points.length)}%`
                 });
 
-                this.$store.dispatch(
-                  'map/pushMultiple',
-                  points.slice(min, max)
-                );
+                this.mapStore.pushMultiple(points.slice(min, max));
                 ++i;
               }, 500);
             });
