@@ -94,6 +94,31 @@ pnpm build
 
 ---
 
+## Deployment
+
+### Deploying to Vercel
+
+The repository is pre-configured for deployment on [Vercel](https://vercel.com/) via [vercel.json](file:///Users/thomas.abbondi/Progetti/personal/poi-editor/vercel.json):
+
+- **Build Command**: `pnpm build`
+- **Output Directory**: `dist/spa`
+- **Routing**: SPA fallback to `index.html` configured for deep-linking
+- **Node.js**: Automatically detected via `.nvmrc` (`26`)
+
+#### Option 1: Git Integration (Recommended)
+
+1. Push your repository to GitHub, GitLab, or Bitbucket.
+2. Import the repository into your Vercel Dashboard.
+3. Vercel will automatically detect `vercel.json` and configure the build settings.
+
+#### Option 2: Vercel CLI
+
+```bash
+pnpm dlx vercel
+```
+
+---
+
 ## Configuration
 
 For advanced configuration, see [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).
