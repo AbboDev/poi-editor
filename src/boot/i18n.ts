@@ -2,9 +2,13 @@ import { boot } from 'quasar/wrappers';
 import { createI18n } from 'vue-i18n';
 import messages from 'src/i18n';
 
+export type MessageLanguages = keyof typeof messages;
+export type MessageSchema = (typeof messages)['en-US'];
+
 const i18n = createI18n({
   legacy: false,
   locale: 'en-US',
+  fallbackLocale: 'en-US',
   messages
 });
 

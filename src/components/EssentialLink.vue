@@ -13,6 +13,7 @@
             v-model="scope.value"
             dense
             autofocus
+            :label="$t('points.editTitle')"
             @keyup.enter="scope.set"
           >
             <template #append>
@@ -28,7 +29,14 @@
     </q-item-section>
 
     <q-item-section side>
-      <q-btn round color="primary" icon="delete" @click="remove" />
+      <q-btn
+        round
+        color="primary"
+        icon="delete"
+        :aria-label="$t('points.delete')"
+        :title="$t('points.delete')"
+        @click="remove"
+      />
     </q-item-section>
   </q-item>
 </template>

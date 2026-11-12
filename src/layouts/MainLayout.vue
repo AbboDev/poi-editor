@@ -7,14 +7,44 @@
           dense
           round
           icon="menu"
-          aria-label="Menu"
+          :aria-label="$t('menu.label')"
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> POI Editor </q-toolbar-title>
+        <q-toolbar-title>{{ $t('app.title') }}</q-toolbar-title>
+
+        <q-btn-dropdown
+          flat
+          dense
+          round
+          icon="language"
+          :aria-label="$t('languages.enUS')"
+          class="q-mr-xs"
+        >
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              @click="setLocale('en-US')"
+              :active="locale === 'en-US'"
+            >
+              <q-item-section>{{ $t('languages.enUS') }}</q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              @click="setLocale('it')"
+              :active="locale === 'it'"
+            >
+              <q-item-section>{{ $t('languages.it') }}</q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
 
         <q-btn
           icon="add_location_alt"
+          :title="$t('points.add')"
+          :aria-label="$t('points.add')"
           @click="addPoint"
           round
           flat
@@ -25,7 +55,7 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list class="column no-wrap full-height">
-        <q-item-label header> Points </q-item-label>
+        <q-item-label header>{{ $t('points.title') }}</q-item-label>
 
         <q-item clickable v-ripple @click="addPoint">
           <q-item-section avatar>
@@ -33,7 +63,7 @@
           </q-item-section>
 
           <q-item-section>
-            <q-item-label>Add point</q-item-label>
+            <q-item-label>{{ $t('points.add') }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -43,7 +73,7 @@
               clearable
               borderless
               v-model="file"
-              label="Import points"
+              :label="$t('points.importInputLabel')"
               class="_sidebar-input-file"
             >
               <template #before>
@@ -54,6 +84,8 @@
                   round
                   color="primary"
                   icon="send"
+                  :title="$t('points.import')"
+                  :aria-label="$t('points.import')"
                   @click="importPoints"
                 />
               </template>
@@ -83,6 +115,7 @@
 <script lang="ts">
 import { uid } from 'quasar';
 import { defineComponent, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import EssentialLink from 'components/EssentialLink.vue';
 import { importOV2, OV2Record } from '../utils/ov2';
 import type { Point } from 'src/store/map';
@@ -95,11 +128,19 @@ export default defineComponent({
   },
 
   setup() {
+    const { t, locale } = useI18n();
     const leftDrawerOpen = ref(false);
     const file = ref<File | null>(null);
 
+    const setLocale = (lang: string) => {
+      locale.value = lang;
+    };
+
     return {
+      t,
       file,
+      locale,
+      setLocale,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -110,7 +151,7 @@ export default defineComponent({
     addPoint() {
       this.$store.dispatch('map/push', {
         id: uid(),
-        title: 'Nuovo punto'
+        title: this.$t('points.newPoint')
       });
     },
     importPoints() {
@@ -120,7 +161,7 @@ export default defineComponent({
       const reader = new FileReader();
       const importStatus = this.$q.notify({
         type: 'primary',
-        message: 'Importazione avviata...',
+        message: this.$t('points.importStarted'),
         group: false,
         timeout: 0,
         spinner: true
@@ -136,7 +177,7 @@ export default defineComponent({
               const errors: string[] = [];
 
               importStatus({
-                message: 'Caricamento record...',
+                message: this.$t('points.loadingRecords'),
                 caption: '0%'
               });
 
@@ -152,7 +193,9 @@ export default defineComponent({
                   });
                 } else {
                   errors.push(
-                    `The record "${record.record}" misses properties!`
+                    this.$t('points.recordMissingProperties', {
+                      record: record.record
+                    })
                   );
                 }
               }
@@ -166,7 +209,7 @@ export default defineComponent({
               const step = 100;
 
               importStatus({
-                message: 'Registrazione punti...',
+                message: this.$t('points.savingPoints'),
                 caption: '0%'
               });
 
@@ -203,7 +246,7 @@ export default defineComponent({
             importStatus({
               icon: 'done',
               spinner: false,
-              message: 'Importazione terminata!',
+              message: this.$t('points.importFinished'),
               timeout: 2500,
               progress: true
             });

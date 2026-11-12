@@ -30,12 +30,18 @@ A web-based geographic Point of Interest (POI) editor and map visualizer built w
   - Extracts coordinates and decodes point descriptions to UTF-8.
   - Batch ingestion into Vuex store with progress notifications and status feedback.
 
+- **Internationalization (i18n)**:
+  - Multi-language support powered by `vue-i18n`.
+  - Fully centralized message catalogs for English (`en-US`) and Italian (`it`).
+  - Interactive language switcher in the top navigation bar.
+
 ---
 
 ## Tech Stack
 
 - **Framework**: [Quasar Framework v2](https://quasar.dev/) with [Vue 3](https://v3.vuejs.org/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Internationalization**: [vue-i18n](https://vue-i18n.intlify.dev/)
 - **State Management**: [Vuex 4](https://vuex.vuejs.org/)
 - **Mapping**: [Leaflet](https://leafletjs.com/) via [@vue-leaflet/vue-leaflet](https://github.com/vue-leaflet/vue-leaflet) & OpenStreetMap
 - **Package Manager**: [pnpm](https://pnpm.io/)

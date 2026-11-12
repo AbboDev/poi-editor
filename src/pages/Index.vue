@@ -12,7 +12,7 @@
       <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
-        name="OpenStreetMap"
+        :name="$t('map.openStreetMap')"
       />
 
       <l-marker
@@ -83,7 +83,7 @@ export default defineComponent({
 
         this.$store.dispatch('map/push', {
           id,
-          title: 'Nuovo punto',
+          title: this.$t('points.newPoint'),
           center: position
         });
       }
